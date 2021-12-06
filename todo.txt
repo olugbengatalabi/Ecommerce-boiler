@@ -1,0 +1,24 @@
+{% comment %} setup your cart such that when a user is created, a cart is created for him immediately so you dont have to create a cart.
+go to the bootstrap link and get the template
+fix database
+install and setup allauth
+git push
+requirements.txt
+gitignore
+create messages in the product page  to tell you when a product has been successfully added to cart
+make it such that after a check the cart is e,ptied and all the cart items are deleted and moved to a new model called order history
+set up conditional rendering of the remove from cart
+if a product is already in cart, then the button should be view in cart not add to cart
+if a product is not in cart then remove from cart should not show
+login required for cart
+add the messages to the template {% endcomment %}
+
+template tags
+crispy forms not working
+make the category a different models, connected to each product via primary keys
+setup quantity in detailed views 
+get amount saved
+add  cart to the products list and index without using the form
+add clear cart
+remove from cart in cart
+django countries

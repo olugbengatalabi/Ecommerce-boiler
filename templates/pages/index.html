@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/index.css'%}">
+{% endblock stylesheet %}
+
+
+
+{% block content %}
+
+<main class="mt-5">
+
+  <div class="container p-5 mt-5">
+    {% include 'partials/_alerts.html' %}
+
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg navbar-dark mdb-color lighten-3 mt-3 mb-5">
+
+      <!-- Navbar brand -->
+      <span class="navbar-brand">Categories:</span>
+
+      <!-- Collapse button -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+        aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Collapsible content -->
+      <div class="collapse navbar-collapse" id="basicExampleNav">
+
+        <!-- Links -->
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">All
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+
+            
+          <li class="nav-item">
+            <a class="nav-link" href="#">Shirts</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Sport wears</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Outwears</a>
+          </li>
+
+        </ul>
+        <!-- Links -->
+
+        <form class="form-inline">
+          <div class="md-form my-0">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+          </div>
+        </form>
+      </div>
+      <!-- Collapsible content -->
+
+    </nav>
+    <!--/.Navbar-->
+
+    <!--Section: Products v.3-->
+    <section class="text-center mb-4">
+
+      <!--Grid row-->
+      <div class="row wow fadeIn">
+        {% for product in products  %}
+        
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-4">
+          
+          <div class="card">
+
+            <!--Card image-->
+            <div class="view overlay">
+              <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12.jpg" class="card-img-top"
+                alt="">
+              <a>
+                <div class="mask rgba-white-slight"></div>
+              </a>
+            </div>
+            <!--Card image-->
+
+            <!--Card content-->
+            <div class="card-body text-center">
+              <!--Category & Title-->
+              <a href="" class="grey-text">
+                <h5>{{product.get_category_display}}</h5>
+              </a>
+              <h5>
+                <strong>
+                  <a href="{% url 'single_product' product.id %}" class="dark-grey-text">{{product.title}}
+                    <span class="badge badge-pill danger-color">{{product.get_label_display}}</span>
+                  </a>
+                </strong>
+              </h5>
+
+              <h4 class="font-weight-bold blue-text">
+                <strong>${{product.price}}</strong>
+              </h4>
+
+            </div>
+            <!--Card content-->
+
+          </div>
+
+        </div>
+        {% endfor %}
+      </div>
+
+    </section>
+
+    <!-- pagination -->
+  <div class="d-flex justify-content-center wow fadeIn">
+      {% if products.has_other_pages%}
+        <ul class="pagination pagination pg-blue">
+          
+          {% if products.has_previous %}
+            <li class="page-item">
+              <a href="?page={{products.previous_page_number}}" class="page-link">&laquo; </a>
+            </li>
+            
+          {% else %}
+            <li class="page-item disabled">
+              <a class="page-link">&laquo; </a>
+            </li>
+            
+          {% endif %}
+          
+          {% for i in products.paginator.page_range %}
+            
+            {% if products.number == i %}
+              <li class="page-item active">
+                <a  class="page-link">{{i}}</a>
+              </li>
+            {% else %}
+              <li class="page-item ">
+                <a href = "?page={{i}}" class="page-link">{{i}}</a>
+              </li>
+            {% endif %}
+              
+          {% endfor %}
+          
+          {% if products.has_next %}
+            <li class="page-item">
+              <a href="?page={{products.next_page_number}} " class="page-link">&raquo;</a>
+            </li>
+          {% else %}
+          <!-- continue from here -->
+          <li class="page-item disabled">
+            <a class="page-link">&raquo;</a>
+          </li>
+          {% endif %}
+            
+            
+        </ul>
+        {% else %}
+        
+      {% endif %}
+  </div>
+    <!--Pagination-->
+
+  </div>
+</main>
+{% endblock content %}
+
+</body>
+
+</html>
