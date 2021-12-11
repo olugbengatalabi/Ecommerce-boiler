@@ -13,12 +13,22 @@ if a product is not in cart then remove from cart should not show
 login required for cart
 add the messages to the template {% endcomment %}
 
-template tags
-crispy forms not working
+{% comment %} template tags
+crispy forms not working {% endcomment %}
 make the category a different models, connected to each product via primary keys
-setup quantity in detailed views 
-get amount saved
+{% comment %} setup quantity in detailed views  {% endcomment %}
+{% comment %} get amount saved {% endcomment %}
 add  cart to the products list and index without using the form
 add clear cart
-remove from cart in cart
-django countries
+{% comment %} remove from cart in cart {% endcomment %}
+{% comment %} django countries {% endcomment %}
+{% comment %} consider setting up a get_total in the cart model {% endcomment %}
+improve your admin with client consideration
+make your messages dismissable an auto dismiss after some seconds
+fix jquery
+fix Unchecked runtime.lastError: The message port closed before a response was received.
+add a search functionality using the one in dermatology atlas index
+paystack integration using stipe template
+set up email with mailchimp and google
+social account ligin with google
+finalize with tests.. try to make multiple orders

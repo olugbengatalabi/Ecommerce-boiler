@@ -6,6 +6,7 @@
   <main >
     <div class="container wow fadeIn">
       <h2 class="my-5 h2 text-center">Checkout form</h2>
+      {% include 'partials/_alerts.html' %}
       <div class="row">
         <div class="col-md-8 mb-4">
           <div class="card">
@@ -131,7 +132,7 @@
         </div>
 
         <div class="col-md-4 mb-4">
-          {% include "order_snippet.html" %}
+          {% include "partials/_order_snippet.html" %}
         </div>
 
       </div>

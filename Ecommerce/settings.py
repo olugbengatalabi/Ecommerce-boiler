@@ -170,3 +170,5 @@ MESSAGE_TAGS = {
 }
 LOGIN_REDIRECT_URL = "/"
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+PAYSTACK_SECRET_KEY = 'django-insecure-ygg6tw(y)2n(n@p3xpx(sx8#qm&5)r+c8gwzt3pweup2!t#pp%'
+PAYSTACK_PUBLIC_KEY = 'django-insecure-ygg6tw(y)2n(n@p3xpx(sx8#qm&5weup2!t#pp%'

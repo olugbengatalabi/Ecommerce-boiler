@@ -46,12 +46,12 @@
             <tr>
               <td colspan="5">
                 <a href="" class="btn btn-primary float-right">Continue shopping</a>
-                <a href="" class="btn btn-warning float-right">Proceed to checkout</a>
+                <a href="{%url 'checkout'%}" class="btn btn-warning float-right">Proceed to checkout</a>
               </td>
             </tr>
           </tbody>
         </table>
-        <p>{{cart_total}}</p>
+        <p>Total: {{cart_total}}</p>
       </div>
     </div>
   </main>

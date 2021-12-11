@@ -50,6 +50,11 @@ def remove_from_cart(request, id):
     return redirect("cart")
 
 
+@login_required(login_url = "account_login")
+def clear_cart(request):
+    cart = Cart.objects.get(user =request.user, ordered = False)
+    cart.cart_items.delete
+    
 @login_required (login_url = "account_login")
 def cart(request):
   try:
