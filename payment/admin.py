@@ -7,9 +7,8 @@ class AddressAdmin(admin.ModelAdmin):
   list_display = ["user","address_type" ]
   list_display_links = ["user"]
 
-class PaymentAdmin(admin.ModelAdmin):
-  list_display = ["user","amount", "ref", "email", "verified", "date_created"]
-  list_display_links = ["user"]
+class PaymentiAdmin(admin.ModelAdmin):
+  list_display = ["amount", "ref", "email", "verified", "date_created"]
   list_editable = [ "featured"]
   list_filter = ["verified", "date_created"]
 

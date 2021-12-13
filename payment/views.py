@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.views.generic import View
 
+from Ecommerce.settings import PAYSTACK_PUBLIC_KEY
+
 from .forms import CheckoutForm, PaymentForm, CouponForm, RefundForm
 from cart.models import CartItem, Cart
 from products.models import Product
@@ -58,7 +60,6 @@ class CheckoutView(View):
 
                 use_default_shipping = form.cleaned_data.get("use_default_shipping")
                 if use_default_shipping:
-                    print("Using the defualt shipping address")
                     address_qs = Address.objects.filter(
                         user=self.request.user, address_type="S", default=True
                     )
@@ -72,7 +73,6 @@ class CheckoutView(View):
                         )
                         return redirect("checkout")
                 else:
-                    print("User is entering a new shipping address")
                     shipping_address1 = form.cleaned_data.get("shipping_address")
                     shipping_address2 = form.cleaned_data.get("shipping_address2")
                     shipping_country = form.cleaned_data.get("shipping_country")
@@ -120,7 +120,6 @@ class CheckoutView(View):
                     cart.save()
 
                 elif use_default_billing:
-                    print("Using the defualt billing address")
                     address_qs = Address.objects.filter(
                         user=self.request.user, address_type="B", default=True
                     )
@@ -134,7 +133,6 @@ class CheckoutView(View):
                         )
                         return redirect("core:checkout")
                 else:
-                    print("User is entering a new billing address")
                     billing_address1 = form.cleaned_data.get("billing_address")
                     billing_address2 = form.cleaned_data.get("billing_address2")
                     billing_country = form.cleaned_data.get("billing_country")
@@ -172,7 +170,7 @@ class CheckoutView(View):
                 if payment_option == "S":
                     return redirect("payment", payment_option="stripe")
                 elif payment_option == "P":
-                    return redirect("payment", payment_option="paypal")
+                    return redirect("payment", payment_option="paystack")
                 else:
                     messages.warning(self.request, "Invalid payment option selected")
                     return redirect("checkout")
@@ -184,7 +182,6 @@ class CheckoutView(View):
 def get_coupon(request, code, cart):
     try:
         coupon = Coupon.objects.get(code=code)
-        print(coupon)
         messages.success(request, "Successfully added coupon")
         cart.coupon = coupon
         cart.save()
@@ -207,7 +204,6 @@ class AddCouponView(View):
                 if cart:
                     try:
                         coupon = Coupon.objects.get(code=code)
-                        print(coupon)
                         messages.success(self.request, "Successfully added coupon")
                         cart.coupon = coupon
                         cart.save()

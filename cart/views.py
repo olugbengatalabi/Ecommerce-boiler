@@ -18,9 +18,9 @@ def add_to_cart(request, id ):
 
     product = get_object_or_404(Product, id = id)
     if product.discount_price is not None:
-      price = int(product.discount_price)
+      price = product.discount_price
     else:
-      price = int(product.price)
+      price = product.price
     line_total = quantity * price
     cart, new_cart = Cart.objects.get_or_create(user = request.user, ordered = False )
     cart_item = CartItem.objects.create(user = request.user, product = product, ordered = False, price = price, quantity = quantity, line_total = line_total)
@@ -33,21 +33,21 @@ def add_to_cart(request, id ):
 
 @login_required (login_url = "account_login")
 def remove_from_cart(request, id):
-  if "single" in request:
-    product = get_object_or_404(Product, id = id)
-    cart_qs = Cart.objects.filter(user = request.user, ordered = False)
-    if cart_qs.exists():
-      cart = cart_qs[0]
-      if cart.cart_items.filter(product = product).exists():
-        cart_item = CartItem.objects.filter(product = product, user = request.user, ordered = False)
-        cart_item.delete()
-        messages.info(request, 'removed from cart')
-    return redirect("single_product", id = id)
-  else:
-    cart_item = CartItem.objects.filter(id = id)
-    cart_item.delete()
-    messages.info(request, "Deleted")
-    return redirect("cart")
+  product = get_object_or_404(Product, id = id)
+  cart_qs = Cart.objects.filter(user = request.user, ordered = False)
+  if cart_qs.exists():
+    cart = cart_qs[0]
+    if cart.cart_items.filter(product = product).exists():
+      cart_item = CartItem.objects.filter(product = product, user = request.user, ordered = False)
+      cart_item.delete()
+      messages.info(request, 'removed from cart')
+  return redirect("single_product", id = id)
+
+def remove_from_cart_page(request, id):
+  cart_item = CartItem.objects.filter(id = id)
+  cart_item.delete()
+  messages.info(request, "Deleted from cart")
+  return redirect("cart")
 
 
 @login_required(login_url = "account_login")
@@ -71,7 +71,7 @@ def cart(request):
         "cart_total": total
       }
     else:
-      messages.error(request, "Cart is empty")
+      messages.info(request, "Cart is empty")
       return redirect("/")  
   except Cart.DoesNotExist:
     messages.error(request, "Cart is empty")

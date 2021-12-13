@@ -38,8 +38,8 @@ class Address(models.Model):
         
 
 
+
 class Payment(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     amount =  models.PositiveIntegerField()
     ref = models.CharField(max_length = 200)
     email = models.EmailField()
@@ -48,7 +48,7 @@ class Payment(models.Model):
     class Meta: 
         ordering = ('-date_created',)
     def __str__(self) -> str:
-        return f"{self.user} paid: {self.amount}"
+        return f"paid: {self.amount}"
     
     def save(self, *args, **kwargs) -> None:
         while not self.ref:
@@ -70,11 +70,10 @@ class Payment(models.Model):
         if self.verified:
             return True
         return False
-
 class Coupon(models.Model):
     code = models.CharField(max_length=15)
     amount =  models.DecimalField(decimal_places=2, max_digits=100)
-    active = accepted = models.BooleanField(default=True)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.code
