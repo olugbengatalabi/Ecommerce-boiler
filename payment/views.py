@@ -10,7 +10,7 @@ from django.views.generic import View
 
 from Ecommerce.settings import PAYSTACK_PUBLIC_KEY
 
-from .forms import CheckoutForm, PaymentForm, CouponForm, RefundForm
+from .forms import CheckoutForm, CouponForm, RefundForm
 from cart.models import CartItem, Cart
 from products.models import Product
 from payment.models import Address, Coupon, Payment, Refund, UserProfile
