@@ -40,7 +40,7 @@ class Address(models.Model):
 
 
 class Payment(models.Model):
-    amount =  models.PositiveIntegerField()
+    amount =  models.DecimalField(decimal_places = 2, max_digits = 100)
     ref = models.CharField(max_length = 200)
     email = models.EmailField()
     verified = models.BooleanField(default = False)
@@ -62,12 +62,20 @@ class Payment(models.Model):
     
     def verify_payment(self):
         paystack = PayStack()
+        if paystack:
+            print("paystack")
         status, result = paystack.verify_payment(self.ref, self.amount)
         if status:
-            if result["amount"]/100 == self.amount:
+            print("status")
+            print(type(result["amount"]))
+            print(type(round(result["amount"]/100, 2)))
+            print(type(self.amount))
+            if round(result["amount"]/100, 2) == float(self.amount):
+                print("result")
                 self.verified = True
                 self.save()
         if self.verified:
+            print("verified")
             return True
         return False
 class Coupon(models.Model):

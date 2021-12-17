@@ -25,10 +25,25 @@ add clear cart
 {% comment %} consider setting up a get_total in the cart model {% endcomment %}
 improve your admin with client consideration
 make your messages dismissable an auto dismiss after some seconds
-fix jquery
-fix Unchecked runtime.lastError: The message port closed before a response was received.
+{% comment %} fix jquery {% endcomment %}
+{% comment %} fix Unchecked runtime.lastError: The message port closed before a response was received. {% endcomment %}
 add a search functionality using the one in dermatology atlas index
 paystack integration using stipe template
 set up email with mailchimp and google
 social account ligin with google
 finalize with tests.. try to make multiple orders
+customize all auth login, sign up, email confirmation, forgot password form
+
+connect your checkout with your payment
+delete unecessary pages
+push
+try to associate orders with individual accounts so each person can see his order history
+change is_ordered to true after a successful order
+add an option for delivered in the cart
+change refund to dispute
+add a contact us model
+
+address
+amount 
+user
+pay button 

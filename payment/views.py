@@ -23,7 +23,7 @@ def is_valid_form(values):
             valid = False
     return valid
 
-
+# @login_required(login_url="account_login")
 class CheckoutView(View):
     def get(self, *args, **kwargs):
         try:
@@ -49,7 +49,7 @@ class CheckoutView(View):
                 context.update({"default_billing_address": billing_address_qs[0]})
             return render(self.request, "payment/checkout.html", context)
         except ObjectDoesNotExist:
-            messages.info(self.request, "You do not have an active order")
+            messages.info(self.request, "There are no items in your cart")
             return redirect("checkout")
 
     def post(self, *args, **kwargs):
@@ -131,7 +131,7 @@ class CheckoutView(View):
                         messages.info(
                             self.request, "No default billing address available"
                         )
-                        return redirect("core:checkout")
+                        return redirect("checkout")
                 else:
                     billing_address1 = form.cleaned_data.get("billing_address")
                     billing_address2 = form.cleaned_data.get("billing_address2")
@@ -165,18 +165,19 @@ class CheckoutView(View):
                             "Please fill in the required billing address fields",
                         )
 
-                payment_option = form.cleaned_data.get("payment_option")
-
-                if payment_option == "S":
-                    return redirect("payment", payment_option="stripe")
-                elif payment_option == "P":
-                    return redirect("payment", payment_option="paystack")
-                else:
-                    messages.warning(self.request, "Invalid payment option selected")
-                    return redirect("checkout")
+                # payment_option = form.cleaned_data.get("payment_option")
+                return redirect("initiate-payment")
+            
+                # if payment_option == "S":
+                #     return redirect("payment", payment_option="stripe")
+                # elif payment_option == "P":
+                #     return redirect("payment", payment_option="paystack")
+                # else:
+                #     messages.warning(self.request, "Invalid payment option selected")
+                #     return redirect("checkout")
         except ObjectDoesNotExist:
-            messages.warning(self.request, "You do not have an active order")
-            return redirect("cart")
+            messages.warning(self.request, "Cannot pay for an empty cart")
+            return redirect("/")
 
 
 def get_coupon(request, code, cart):
@@ -225,31 +226,31 @@ class AddCouponView(View):
             messages.error(self.request, "Not a valid coupon code")
             return redirect("checkout")
 
-
-def initiate_payment(request: HttpRequest) -> HttpResponse:
-    if request.method == "POST":
-        payment_form = PaymentForm(request.POST)
-        if payment_form.is_valid():
-            payment = payment_form.save()
-            context = {
-                "payment": payment,
-                "paystack_public_key": settings.PAYSTACK_PUBLIC_KEY
-            }
-            return render(request, "payment/make_payment.html", context)
-    else:
-        payment_form = PaymentForm(request.POST)
-        context = {
-            "payment_form" : payment_form
+@login_required(login_url="account_login")
+def initiate_payment(request):
+    cart = Cart.objects.get(user = request.user, ordered = False)
+    payment = Payment.objects.create(amount = cart.total, email = request.user.email, )
+    context = {
+        "payment": payment,
+            
+        "paystack_public_key": settings.PAYSTACK_PUBLIC_KEY
         }
-        return render(request, "payment/initiate_payment.html", context)
+    return render(request, "payment/make_payment.html", context)
         
-
-def verify_payment(request: HttpRequest, ref: str) -> HttpResponse:
+@login_required(login_url="account_login")
+def verify_payment(request, ref):
+    cart = get_object_or_404(Cart, user = request.user)
     payment = get_object_or_404(Payment, ref = ref)
     verified = payment.verify_payment()
     if verified:
-        messages.success(request, "Verification Successful")
+        cart.ordered = True
+        cart_items = CartItem.objects.filter(user = request.user)
+        for item in cart_items:
+            item.ordered = True
+            item.save()
+        cart.save()
+        messages.success(request, "Verification Successful, continue shopping")
     else:
-        messages.error(request, "verification failed")
-    return redirect("initiate-payment")
+        messages.error(request, "verification failed, contact support for more details")
+    return redirect("/")
 

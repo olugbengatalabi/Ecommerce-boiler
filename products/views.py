@@ -18,7 +18,7 @@ def product_list(request):
 def single_product(request, id):
   product = get_object_or_404(Product, id = id)
   in_cart = False
-  if CartItem.objects.filter(product = product, user = request.user).exists():
+  if CartItem.objects.filter(product = product, user = request.user, ordered = False).exists():
     in_cart = True
   context = {
     "product": product,

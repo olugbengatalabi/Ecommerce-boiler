@@ -11,8 +11,6 @@ from cart.models import Cart, CartItem
 
 @login_required (login_url = "account_login")
 def add_to_cart(request, id ):
-  print(request.method)
-  print(request)
   if request.method == "POST":
     quantity = int(request.POST["quantity"])
 
