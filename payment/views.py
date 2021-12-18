@@ -104,8 +104,9 @@ class CheckoutView(View):
                     else:
                         messages.info(
                             self.request,
-                            "Please fill in the required shipping address fields",
+                            "Please fill in the required address fields",
                         )
+                        return redirect("checkout")
 
                 use_default_billing = form.cleaned_data.get("use_default_billing")
                 same_billing_address = form.cleaned_data.get("same_billing_address")
@@ -162,8 +163,9 @@ class CheckoutView(View):
                     else:
                         messages.info(
                             self.request,
-                            "Please fill in the required billing address fields",
+                            "Please fill in the required address fields",
                         )
+                        return redirect("checkout")
 
                 # payment_option = form.cleaned_data.get("payment_option")
                 return redirect("initiate-payment")

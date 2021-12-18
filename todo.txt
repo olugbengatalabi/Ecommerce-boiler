@@ -47,3 +47,5 @@ address
 amount 
 user
 pay button 
+
+a profile button with a drop down menu showing order history, order history with a time stamp like. 3days a go, 2hrs ago, 4months ago with an option to open dispute.
